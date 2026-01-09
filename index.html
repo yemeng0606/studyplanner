@@ -4,9 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4f46e5">
     <title>StudyPlanner - 学生生活を効率的に管理</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
         rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon.png">
     <style>
         :root {
             --primary: #4f46e5;
@@ -25,6 +28,7 @@
             --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             --radius-sm: 8px;
             --radius-md: 12px;
             --radius-lg: 16px;
@@ -43,8 +47,7 @@
             min-height: 100vh;
             color: var(--text-primary);
             line-height: 1.6;
-            padding-bottom: 80px;
-            /* フローティングボタンのスペース確保 */
+            padding-bottom: 90px;
         }
 
         .container {
@@ -86,7 +89,6 @@
             background: linear-gradient(180deg, rgba(240, 244, 255, 0.95) 0%, rgba(224, 231, 255, 0.95) 100%);
             backdrop-filter: blur(8px);
             margin: 0 -16px;
-            /* container padding相殺 */
             padding: 8px 16px;
             box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.1);
         }
@@ -233,7 +235,6 @@
             margin-top: 10px;
         }
 
-        /* タブナビゲーション */
         .tabs-nav {
             display: flex;
             gap: 8px;
@@ -245,18 +246,14 @@
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
-            /* Firefox */
         }
 
         .tabs-nav::-webkit-scrollbar {
             display: none;
         }
 
-        /* Chrome/Safari */
-
         .tab-btn {
-            flex: 0 0 auto;
-            /* 横スクロール用に縮小させない */
+            flex: 1;
             padding: 10px 14px;
             border: none;
             background: transparent;
@@ -538,12 +535,13 @@
             opacity: 0.4;
         }
 
-        /* カレンダースタイル */
+        /* カレンダースタイル（モーダル内） */
         .calendar-wrapper {
+            /* モーダル内に収まるよう調整 */
             background: white;
-            border-radius: var(--radius-md);
-            padding: 16px;
-            box-shadow: var(--shadow-md);
+            border-radius: 0;
+            box-shadow: none;
+            padding: 0;
         }
 
         .calendar-header {
@@ -583,7 +581,7 @@
         }
 
         .calendar-day {
-            min-height: 70px;
+            min-height: 60px;
             border: 1px solid #f1f5f9;
             border-radius: 6px;
             padding: 2px;
@@ -639,6 +637,7 @@
             flex-direction: column;
             gap: 12px;
             z-index: 900;
+            align-items: flex-end;
         }
 
         .tool-btn {
@@ -646,9 +645,9 @@
             height: 56px;
             border-radius: 28px;
             color: white;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             border: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -660,6 +659,13 @@
             transform: scale(0.95);
         }
 
+        .btn-calendar {
+            background: white;
+            color: var(--text-primary);
+            font-size: 1.4rem;
+        }
+
+        /* カレンダーのみ白背景で見やすく */
         .btn-links {
             background: var(--accent);
         }
@@ -681,7 +687,7 @@
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 16px;
         }
 
         .modal-overlay.open {
@@ -692,7 +698,7 @@
             background: white;
             border-radius: var(--radius-lg);
             width: 100%;
-            max-width: 400px;
+            max-width: 480px;
             padding: 24px;
             box-shadow: var(--shadow-xl);
             animation: zoomIn 0.2s ease;
@@ -862,27 +868,17 @@
                 justify-content: center;
                 padding: 12px;
             }
-
-            .calendar-day {
-                min-height: 50px;
-            }
-
-            .calendar-day-header {
-                font-size: 0.7rem;
-            }
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <!-- ヘッダー -->
         <header class="header">
             <div class="app-title">
                 <h1>📚 StudyPlanner</h1>
                 <p>学生生活を効率的に管理</p>
             </div>
-
             <div class="goals-sticky-wrapper">
                 <div class="goals-section">
                     <div class="goal-card long-term">
@@ -904,10 +900,8 @@
             </div>
         </header>
 
-        <!-- 通知エリア -->
         <div id="notificationArea" class="notification-area"></div>
 
-        <!-- メインコンテンツ -->
         <main class="main-content">
             <nav class="tabs-nav">
                 <button class="tab-btn active" data-tab="assignment"><span
@@ -919,7 +913,7 @@
                         class="tab-count" id="count-schedule">0</span></button>
                 <button class="tab-btn" data-tab="parttime"><span class="tab-icon">💼</span><span>バイト</span><span
                         class="tab-count" id="count-parttime">0</span></button>
-                <button class="tab-btn" data-tab="calendar"><span class="tab-icon">🗓️</span><span>カレンダー</span></button>
+                <!-- カレンダータブ削除 -->
             </nav>
 
             <div class="task-panel active" id="panel-assignment">
@@ -966,30 +960,13 @@
                 <ul class="task-list" id="list-parttime"></ul>
             </div>
 
-            <div class="task-panel" id="panel-calendar">
-                <div class="calendar-wrapper">
-                    <div class="calendar-header">
-                        <button class="calendar-nav-btn" onclick="changeMonth(-1)">◀</button>
-                        <div class="calendar-month" id="calendarMonthLabel"></div>
-                        <button class="calendar-nav-btn" onclick="changeMonth(1)">▶</button>
-                    </div>
-                    <div class="calendar-grid">
-                        <div class="calendar-day-header sunday">日</div>
-                        <div class="calendar-day-header">月</div>
-                        <div class="calendar-day-header">火</div>
-                        <div class="calendar-day-header">水</div>
-                        <div class="calendar-day-header">木</div>
-                        <div class="calendar-day-header">金</div>
-                        <div class="calendar-day-header saturday">土</div>
-                    </div>
-                    <div class="calendar-grid" id="calendarGrid"></div>
-                </div>
-            </div>
+            <!-- カレンダーパネル削除 -->
         </main>
     </div>
 
-    <!-- ツールボタン群 (分離) -->
+    <!-- ツールボタン群 (分離・追加) -->
     <div class="floating-btn-container">
+        <button class="tool-btn btn-calendar" onclick="openCalendarModal()" title="カレンダー">🗓️</button>
         <button class="tool-btn btn-links" onclick="openLinksModal()" title="リンク集">🔗</button>
         <button class="tool-btn btn-timer" onclick="openTimerModal()" title="集中タイマー">⏱️</button>
     </div>
@@ -1032,8 +1009,43 @@
         </div>
     </div>
 
+    <!-- カレンダーモーダル (新規) -->
+    <div class="modal-overlay" id="calendarModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">🗓️ カレンダー</h2>
+                <button class="close-modal" onclick="closeCalendarModal()">×</button>
+            </div>
+            <div class="calendar-wrapper">
+                <div class="calendar-header">
+                    <button class="calendar-nav-btn" onclick="changeMonth(-1)">◀</button>
+                    <div class="calendar-month" id="calendarMonthLabel"></div>
+                    <button class="calendar-nav-btn" onclick="changeMonth(1)">▶</button>
+                </div>
+                <div class="calendar-grid">
+                    <div class="calendar-day-header sunday">日</div>
+                    <div class="calendar-day-header">月</div>
+                    <div class="calendar-day-header">火</div>
+                    <div class="calendar-day-header">水</div>
+                    <div class="calendar-day-header">木</div>
+                    <div class="calendar-day-header">金</div>
+                    <div class="calendar-day-header saturday">土</div>
+                </div>
+                <div class="calendar-grid" id="calendarGrid"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // ===== データ管理 =====
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('SW registered!', reg))
+                    .catch(err => console.log('SW registration failed: ', err));
+            });
+        }
+
         const STORAGE_KEY = 'studyPlannerData';
         const GOALS_KEY = 'studyPlannerGoals';
         const LINKS_KEY = 'studyPlannerLinks';
@@ -1067,7 +1079,7 @@
             saveToStorage();
             renderTasks(category);
             updateCounts();
-            renderCalendar();
+            renderCalendar(); // カレンダー開いている場合もあるので更新
             input.value = '';
             dateInput.value = '';
             input.focus();
@@ -1126,37 +1138,25 @@
         }
         function escapeHtml(text) { return text.replace(/[&<>"']/g, function (m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]; }); }
 
-        // ===== 通知機能 =====
         function checkNotifications() {
             const today = new Date(); today.setHours(0, 0, 0, 0);
             const notifications = [];
-
-            // 1. 全タスク対象：期限1日前
             Object.keys(tasksData).forEach(cat => {
                 tasksData[cat].forEach(task => {
                     if (!task.date || task.completed) return;
                     const tDate = new Date(task.date); tDate.setHours(0, 0, 0, 0);
                     const diffTime = tDate - today;
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                    if (diffDays === 1) {
-                        notifications.push({ type: 'urgent', title: '明日が期限です', message: `「${escapeHtml(task.text)}」の期限が迫っています！` });
-                    }
+                    if (diffDays === 1) notifications.push({ type: 'urgent', title: '明日が期限です', message: `「${escapeHtml(task.text)}」の期限が迫っています！` });
                 });
             });
-
-            // 2. テスト対象：2日後の復習通知
             tasksData['test'].forEach(task => {
                 if (!task.date) return;
                 const tDate = new Date(task.date); tDate.setHours(0, 0, 0, 0);
                 const diffTime = today - tDate;
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                if (diffDays === 2) {
-                    notifications.push({ type: 'review', title: '復習リマインダー', message: `テスト「${escapeHtml(task.text)}」から2日が経ちました。復習は終わりましたか？` });
-                }
+                if (diffDays === 2) notifications.push({ type: 'review', title: '復習リマインダー', message: `テスト「${escapeHtml(task.text)}」から2日が経ちました。復習は終わりましたか？` });
             });
-
             if (notifications.length > 0) {
                 const area = document.getElementById('notificationArea');
                 area.style.display = 'block';
@@ -1196,6 +1196,8 @@
             }
         }
         function changeMonth(delta) { currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta); renderCalendar(); }
+        function openCalendarModal() { document.getElementById('calendarModal').classList.add('open'); renderCalendar(); }
+        function closeCalendarModal() { document.getElementById('calendarModal').classList.remove('open'); }
 
         // ===== リンク集 =====
         function loadLinks() { const data = localStorage.getItem(LINKS_KEY); if (data) linksData = JSON.parse(data); renderLinks(); }
@@ -1251,7 +1253,7 @@
         function openTimerModal() { document.getElementById('timerModal').classList.add('open'); syncTimerFromInput(); }
         function closeTimerModal() { document.getElementById('timerModal').classList.remove('open'); }
 
-        // ===== イベントリスナー設定 =====
+        // ===== イベントリスナー =====
         document.addEventListener('DOMContentLoaded', () => {
             loadFromStorage(); loadGoals();
             const tabBtns = document.querySelectorAll('.tab-btn');
@@ -1260,13 +1262,13 @@
                 btn.addEventListener('click', () => {
                     tabBtns.forEach(b => b.classList.remove('active')); btn.classList.add('active');
                     panels.forEach(p => p.classList.remove('active')); document.getElementById(`panel-${btn.dataset.tab}`).classList.add('active');
-                    if (btn.dataset.tab === 'calendar') renderCalendar();
                 });
             });
             ['longTerm', 'midTerm', 'shortTerm'].forEach(type => {
                 document.getElementById(`${type}Goal`).addEventListener('input', (e) => { goalsData[type] = e.target.value; saveGoals(); });
             });
 
+            document.getElementById('calendarModal').addEventListener('click', (e) => { if (e.target.id === 'calendarModal') closeCalendarModal(); });
             document.getElementById('linksModal').addEventListener('click', (e) => { if (e.target.id === 'linksModal') closeLinksModal(); });
             document.getElementById('timerModal').addEventListener('click', (e) => { if (e.target.id === 'timerModal') closeTimerModal(); });
             document.getElementById('timerMin').addEventListener('input', syncTimerFromInput);
