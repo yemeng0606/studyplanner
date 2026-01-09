@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>StudyPlanner - 学生生活を効率的に管理</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
         rel="stylesheet">
@@ -18,8 +18,8 @@
             --danger: #ef4444;
             --bg-gradient-start: #f0f4ff;
             --bg-gradient-end: #e0e7ff;
-            --card-bg: rgba(255, 255, 255, 0.85);
-            --card-border: rgba(255, 255, 255, 0.3);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-border: rgba(255, 255, 255, 0.5);
             --text-primary: #1e293b;
             --text-secondary: #64748b;
             --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -34,6 +34,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -42,26 +43,29 @@
             min-height: 100vh;
             color: var(--text-primary);
             line-height: 1.6;
+            padding-bottom: 80px;
+            /* フローティングボタンのスペース確保 */
         }
 
         .container {
+            width: 100%;
             max-width: 900px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 16px;
         }
 
         /* Header */
         .header {
-            padding: 15px 0 5px;
+            padding: 10px 0 0;
         }
 
         .app-title {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .app-title h1 {
-            font-size: 1.8rem;
+            font-size: clamp(1.4rem, 4vw, 1.8rem);
             font-weight: 700;
             background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
             -webkit-background-clip: text;
@@ -70,41 +74,41 @@
         }
 
         .app-title p {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-secondary);
-            margin-top: 4px;
         }
 
         .goals-sticky-wrapper {
             position: sticky;
             top: 0;
             z-index: 100;
-            padding-bottom: 10px;
-            background: linear-gradient(180deg, rgba(240, 244, 255, 0.9) 0%, rgba(224, 231, 255, 0.9) 100%);
+            padding-bottom: 8px;
+            background: linear-gradient(180deg, rgba(240, 244, 255, 0.95) 0%, rgba(224, 231, 255, 0.95) 100%);
             backdrop-filter: blur(8px);
-            margin: 0 -20px;
-            padding: 10px 20px;
+            margin: 0 -16px;
+            /* container padding相殺 */
+            padding: 8px 16px;
+            box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.1);
         }
 
         .goals-section {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 10px;
         }
 
         .goal-card {
             background: var(--card-bg);
-            backdrop-filter: blur(10px);
             border: 1px solid var(--card-border);
             border-radius: var(--radius-md);
-            padding: 16px;
-            box-shadow: var(--shadow-md);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            padding: 12px;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s ease;
         }
 
-        .goal-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+        .goal-card:focus-within {
+            box-shadow: var(--shadow-md);
+            background: white;
         }
 
         .goal-card.long-term {
@@ -120,14 +124,14 @@
         }
 
         .goal-label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
 
         .goal-card.long-term .goal-label {
@@ -146,29 +150,25 @@
             width: 100%;
             border: none;
             background: transparent;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-family: inherit;
             color: var(--text-primary);
             resize: none;
             outline: none;
-            min-height: 40px;
-        }
-
-        .goal-input::placeholder {
-            color: var(--text-secondary);
-            opacity: 0.7;
+            min-height: 3em;
+            line-height: 1.4;
         }
 
         /* 通知エリア */
         .notification-area {
             display: none;
-            margin-bottom: 20px;
+            margin: 12px 0;
             animation: slideDown 0.3s ease;
         }
 
         @keyframes slideDown {
             from {
-                transform: translateY(-20px);
+                transform: translateY(-10px);
                 opacity: 0;
             }
 
@@ -181,13 +181,14 @@
         .notification-card {
             background: white;
             border-left: 4px solid var(--primary);
-            padding: 12px 16px;
+            padding: 12px;
             border-radius: var(--radius-sm);
             box-shadow: var(--shadow-md);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            gap: 10px;
         }
 
         .notification-card.urgent {
@@ -206,12 +207,12 @@
 
         .notification-title {
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             margin-bottom: 2px;
         }
 
         .notification-message {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-secondary);
         }
 
@@ -222,10 +223,9 @@
             cursor: pointer;
             color: var(--text-secondary);
             padding: 4px;
-        }
-
-        .notification-close:hover {
-            color: var(--text-primary);
+            margin: -4px -4px 0 0;
+            min-width: 30px;
+            min-height: 30px;
         }
 
         /* メインコンテンツ */
@@ -238,21 +238,30 @@
             display: flex;
             gap: 8px;
             background: var(--card-bg);
-            backdrop-filter: blur(10px);
             border-radius: var(--radius-lg);
             padding: 6px;
             box-shadow: var(--shadow-md);
             margin-bottom: 16px;
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            /* Firefox */
         }
 
+        .tabs-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Chrome/Safari */
+
         .tab-btn {
-            flex: 1;
-            padding: 12px 10px;
+            flex: 0 0 auto;
+            /* 横スクロール用に縮小させない */
+            padding: 10px 14px;
             border: none;
             background: transparent;
             font-family: inherit;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 500;
             color: var(--text-secondary);
             border-radius: var(--radius-md);
@@ -273,7 +282,7 @@
         .tab-btn.active {
             background: var(--primary);
             color: white;
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow-sm);
         }
 
         .tab-btn:not(.active) .tab-count {
@@ -282,10 +291,12 @@
         }
 
         .tab-count {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             background: rgba(255, 255, 255, 0.2);
-            padding: 2px 8px;
+            padding: 1px 6px;
             border-radius: 10px;
+            min-width: 1.4em;
+            text-align: center;
         }
 
         /* タスクリストエリア */
@@ -301,7 +312,7 @@
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(5px);
             }
 
             to {
@@ -312,33 +323,37 @@
 
         .add-task-form {
             background: var(--card-bg);
-            backdrop-filter: blur(10px);
             border-radius: var(--radius-md);
-            padding: 16px;
+            padding: 12px;
             margin-bottom: 16px;
             box-shadow: var(--shadow-md);
         }
 
         .form-row {
             display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .task-input,
-        .date-input {
-            padding: 12px 16px;
-            border: 2px solid transparent;
-            background: rgba(241, 245, 249, 0.8);
-            border-radius: var(--radius-sm);
-            font-family: inherit;
-            font-size: 0.95rem;
-            color: var(--text-primary);
-            transition: all 0.2s ease;
+            gap: 8px;
+            align-items: stretch;
+            flex-wrap: wrap;
         }
 
         .task-input {
             flex: 1;
+            min-width: 150px;
+            padding: 10px 12px;
+            border: 2px solid transparent;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .date-input {
+            width: 130px;
+            padding: 10px 8px;
+            border: 2px solid transparent;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
         }
 
         .task-input:focus,
@@ -348,58 +363,45 @@
             background: white;
         }
 
-        .date-input {
-            cursor: pointer;
-        }
-
         .add-btn {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 0 20px;
+            background: var(--primary);
             color: white;
             border: none;
             border-radius: var(--radius-sm);
-            font-family: inherit;
             font-size: 0.9rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 6px;
-            white-space: nowrap;
+            gap: 4px;
+            transition: transform 0.1s;
         }
 
-        .add-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-lg);
+        .add-btn:active {
+            transform: scale(0.96);
         }
 
         .task-list {
             list-style: none;
+            padding-bottom: 20px;
         }
 
         .task-item {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
+            background: white;
             border-radius: var(--radius-md);
-            padding: 16px;
-            margin-bottom: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
             box-shadow: var(--shadow-sm);
             display: flex;
-            align-items: center;
-            gap: 14px;
-            transition: all 0.2s ease;
+            align-items: flex-start;
+            gap: 12px;
             border-left: 4px solid transparent;
-        }
-
-        .task-item:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateX(4px);
         }
 
         .task-item.completed {
             opacity: 0.6;
-            background: rgba(241, 245, 249, 0.6);
+            background: #f8fafc;
         }
 
         .task-item.completed .task-text {
@@ -425,30 +427,31 @@
 
         .checkbox-wrapper {
             position: relative;
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             flex-shrink: 0;
+            margin-top: 2px;
         }
 
         .checkbox-wrapper input {
             position: absolute;
             opacity: 0;
-            cursor: pointer;
             width: 100%;
             height: 100%;
-            z-index: 1;
+            z-index: 2;
+            cursor: pointer;
         }
 
         .checkmark {
             position: absolute;
             top: 0;
             left: 0;
-            width: 22px;
-            height: 22px;
+            width: 100%;
+            height: 100%;
             background: white;
             border: 2px solid #cbd5e1;
             border-radius: 6px;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
 
         .checkbox-wrapper input:checked~.checkmark {
@@ -460,8 +463,8 @@
             content: '';
             position: absolute;
             display: none;
-            left: 6px;
-            top: 2px;
+            left: 7px;
+            top: 3px;
             width: 6px;
             height: 12px;
             border: solid white;
@@ -480,11 +483,12 @@
 
         .task-text {
             font-size: 0.95rem;
-            word-break: break-word;
+            word-break: break-all;
+            line-height: 1.5;
         }
 
         .task-date {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-secondary);
             margin-top: 4px;
             display: flex;
@@ -494,56 +498,51 @@
 
         .task-date.overdue {
             color: var(--danger);
-            font-weight: 500;
+            font-weight: 700;
         }
 
         .task-date.today {
             color: var(--warning);
-            font-weight: 500;
+            font-weight: 700;
         }
 
         .delete-btn {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border: none;
             background: transparent;
-            color: var(--text-secondary);
+            color: #94a3b8;
             border-radius: var(--radius-sm);
             cursor: pointer;
-            transition: all 0.2s ease;
-            opacity: 0;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-top: -6px;
+            margin-right: -6px;
         }
 
-        .task-item:hover .delete-btn {
-            opacity: 1;
-        }
-
-        .delete-btn:hover {
-            background: rgba(239, 68, 68, 0.1);
+        .delete-btn:active {
+            background: #fee2e2;
             color: var(--danger);
         }
 
         .empty-state {
             text-align: center;
-            padding: 48px 24px;
+            padding: 40px 20px;
             color: var(--text-secondary);
         }
 
         .empty-state-icon {
             font-size: 3rem;
-            margin-bottom: 16px;
-            opacity: 0.5;
+            margin-bottom: 10px;
+            opacity: 0.4;
         }
 
         /* カレンダースタイル */
         .calendar-wrapper {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
+            background: white;
             border-radius: var(--radius-md);
-            padding: 20px;
+            padding: 16px;
             box-shadow: var(--shadow-md);
         }
 
@@ -555,7 +554,7 @@
         }
 
         .calendar-month {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: var(--primary-dark);
         }
@@ -565,77 +564,54 @@
             background: transparent;
             font-size: 1.2rem;
             cursor: pointer;
-            padding: 4px 8px;
+            padding: 8px 12px;
             color: var(--text-secondary);
-            border-radius: 4px;
-        }
-
-        .calendar-nav-btn:hover {
-            background: rgba(0, 0, 0, 0.05);
-            color: var(--primary);
         }
 
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
+            gap: 2px;
         }
 
         .calendar-day-header {
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: var(--text-secondary);
             padding: 8px 0;
             font-weight: 500;
         }
 
-        .calendar-day-header.sunday {
-            color: var(--danger);
-        }
-
-        .calendar-day-header.saturday {
-            color: var(--primary);
-        }
-
         .calendar-day {
-            min-height: 80px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            border-radius: 8px;
-            padding: 4px;
-            background: rgba(255, 255, 255, 0.4);
-            transition: all 0.2s ease;
-            cursor: pointer;
+            min-height: 70px;
+            border: 1px solid #f1f5f9;
+            border-radius: 6px;
+            padding: 2px;
+            background: #fff;
             display: flex;
             flex-direction: column;
-            gap: 2px;
-        }
-
-        .calendar-day:hover {
-            background: white;
-            box-shadow: var(--shadow-sm);
+            gap: 1px;
         }
 
         .calendar-day.today {
-            background: #fff9e6;
+            background: #fffbeb;
             border-color: var(--warning);
         }
 
         .calendar-date-num {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: 500;
-            margin-bottom: 4px;
-            padding-left: 4px;
+            margin-bottom: 2px;
+            padding-left: 2px;
         }
 
         .calendar-task-dot {
-            font-size: 0.7rem;
-            padding: 2px 4px;
-            border-radius: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: white;
-            margin-bottom: 1px;
+            font-size: 0px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 1px;
         }
 
         .cat-dot-assignment {
@@ -657,31 +633,31 @@
         /* ツールボタン (分離) */
         .floating-btn-container {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 24px;
+            right: 24px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            z-index: 1000;
+            gap: 12px;
+            z-index: 900;
         }
 
         .tool-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 25px;
+            width: 56px;
+            height: 56px;
+            border-radius: 28px;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             border: none;
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            transition: transform 0.2s;
         }
 
-        .tool-btn:hover {
-            transform: scale(1.1);
+        .tool-btn:active {
+            transform: scale(0.95);
         }
 
         .btn-links {
@@ -692,7 +668,7 @@
             background: var(--primary);
         }
 
-        /* モーダル共通 */
+        /* モーダル */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -700,11 +676,12 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            z-index: 2000;
+            backdrop-filter: blur(2px);
+            z-index: 1000;
             display: none;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
 
         .modal-overlay.open {
@@ -714,21 +691,23 @@
         .modal {
             background: white;
             border-radius: var(--radius-lg);
-            width: 90%;
+            width: 100%;
             max-width: 400px;
             padding: 24px;
-            box-shadow: var(--shadow-lg);
-            animation: slideUp 0.3s ease;
+            box-shadow: var(--shadow-xl);
+            animation: zoomIn 0.2s ease;
+            max-height: 85vh;
+            overflow-y: auto;
         }
 
-        @keyframes slideUp {
+        @keyframes zoomIn {
             from {
-                transform: translateY(50px);
+                transform: scale(0.95);
                 opacity: 0;
             }
 
             to {
-                transform: translateY(0);
+                transform: scale(1);
                 opacity: 1;
             }
         }
@@ -741,58 +720,60 @@
         }
 
         .modal-title {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: var(--text-primary);
         }
 
         .close-modal {
-            background: none;
+            background: #f1f5f9;
             border: none;
-            font-size: 1.5rem;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1.2rem;
             cursor: pointer;
             color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* リンク集 */
+        /* リンク集・タイマー */
         .link-list {
             list-style: none;
-            margin-bottom: 20px;
-            max-height: 300px;
-            overflow-y: auto;
+            margin-bottom: 10px;
         }
 
         .link-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 10px;
+            padding: 12px 0;
             border-bottom: 1px solid #f1f5f9;
         }
 
         .link-item a {
             color: var(--primary);
             text-decoration: none;
+            font-size: 0.95rem;
             font-weight: 500;
-        }
-
-        .link-item a:hover {
-            text-decoration: underline;
         }
 
         .link-form {
             display: flex;
             gap: 8px;
+            flex-direction: column;
+            margin-bottom: 10px;
         }
 
         .link-input {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.9rem;
         }
 
-        /* タイマー */
         .timer-display {
             font-size: 3.5rem;
             font-weight: 700;
@@ -801,31 +782,29 @@
             margin: 20px 0;
             text-align: center;
             line-height: 1;
+            letter-spacing: -2px;
         }
 
         .timer-controls {
-            display: flex;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
             margin-top: 20px;
         }
 
         .timer-btn {
-            padding: 10px 20px;
+            padding: 14px;
             border: none;
-            border-radius: 8px;
-            cursor: pointer;
+            border-radius: 12px;
             font-weight: 700;
             color: white;
-            transition: opacity 0.2s;
-        }
-
-        .timer-btn:active {
-            opacity: 0.8;
+            cursor: pointer;
+            font-size: 1rem;
         }
 
         .btn-start {
             background: var(--success);
+            grid-column: span 2;
         }
 
         .btn-pause {
@@ -841,35 +820,55 @@
             justify-content: center;
             gap: 8px;
             align-items: center;
+            margin-bottom: 10px;
         }
 
         .time-input {
-            width: 70px;
-            padding: 8px;
+            width: 80px;
+            padding: 12px;
             text-align: center;
             border: 1px solid #cbd5e1;
-            border-radius: 4px;
-            font-size: 1.1rem;
+            border-radius: 8px;
+            font-size: 1.2rem;
         }
 
-        @media (max-width: 768px) {
+        /* スマートフォン向けレスポンシブ設定 */
+        @media (max-width: 600px) {
             .goals-section {
                 grid-template-columns: 1fr;
+            }
+
+            .goal-card {
+                padding: 10px;
+            }
+
+            .goal-input {
+                min-height: 2.5em;
+                font-size: 0.85rem;
+            }
+
+            .form-row {
+                flex-direction: column;
                 gap: 10px;
             }
 
-            .calendar-day {
-                min-height: 60px;
+            .task-input,
+            .date-input,
+            .add-btn {
+                width: 100%;
             }
 
-            .calendar-task-dot {
-                font-size: 0px;
-                width: 6px;
-                height: 6px;
-                padding: 0;
-                border-radius: 50%;
-                display: inline-block;
-                margin: 1px;
+            .add-btn {
+                justify-content: center;
+                padding: 12px;
+            }
+
+            .calendar-day {
+                min-height: 50px;
+            }
+
+            .calendar-day-header {
+                font-size: 0.7rem;
             }
         }
     </style>
@@ -1002,10 +1001,11 @@
                 <h2 class="modal-title">🔗 リンク集</h2>
                 <button class="close-modal" onclick="closeLinksModal()">×</button>
             </div>
-            <div class="link-form" style="margin-bottom: 12px;">
+            <div class="link-form">
                 <input type="text" class="link-input" id="linkTitle" placeholder="サイト名">
                 <input type="text" class="link-input" id="linkUrl" placeholder="URL">
-                <button class="add-btn" onclick="addLink()" style="padding: 8px 12px;">追加</button>
+                <button class="add-btn" onclick="addLink()"
+                    style="margin-top: 8px; justify-content: center;">追加</button>
             </div>
             <ul class="link-list" id="linkList"></ul>
         </div>
@@ -1020,7 +1020,7 @@
             </div>
             <div class="timer-inputs">
                 <input type="number" class="time-input" id="timerMin" value="25" min="0">
-                <span style="font-weight:bold;">:</span>
+                <span style="font-weight:bold; font-size:1.5rem;">:</span>
                 <input type="number" class="time-input" id="timerSec" value="00" min="0" max="59">
             </div>
             <div class="timer-display" id="timerDisplay">25:00</div>
@@ -1090,10 +1090,10 @@
             const diffTime = taskDate - today;
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
             const dateText = taskDate.toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' });
-            if (diffDays < 0) return { class: 'overdue', text: `⚠️ ${dateText}（期限切れ）` };
-            else if (diffDays === 0) return { class: 'today', text: `🔥 ${dateText}（今日）` };
-            else if (diffDays === 1) return { class: '', text: `📌 ${dateText}（明日）` };
-            else if (diffDays <= 7) return { class: '', text: `📅 ${dateText}（${diffDays}日後）` };
+            if (diffDays < 0) return { class: 'overdue', text: `⚠️ ${dateText}` };
+            else if (diffDays === 0) return { class: 'today', text: `🔥 ${dateText}` };
+            else if (diffDays === 1) return { class: '', text: `📌 ${dateText}` };
+            else if (diffDays <= 7) return { class: '', text: `📅 ${dateText}` };
             else return { class: '', text: `📅 ${dateText}` };
         }
 
@@ -1102,8 +1102,7 @@
             const tasks = tasksData[category];
             if (tasks.length === 0) { list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📋</div><p>タスクがありません</p></div>`; return; }
             const sortedTasks = [...tasks].sort((a, b) => {
-                if (!a.date && !b.date) return 0; if (!a.date) return 1; if (!b.date) return -1;
-                return new Date(a.date) - new Date(b.date);
+                if (!a.date && !b.date) return 0; if (a.date < b.date) return -1; if (a.date > b.date) return 1; return 0;
             });
             list.innerHTML = sortedTasks.map(task => {
                 const dateStatus = getDateStatus(task.date);
@@ -1114,7 +1113,7 @@
                             <div class="task-text">${escapeHtml(task.text)}</div>
                             ${task.date ? `<div class="task-date ${dateStatus.class}">${dateStatus.text}</div>` : ''}
                         </div>
-                        <button class="delete-btn" onclick="deleteTask('${category}', '${task.id}')" title="削除">🗑️</button>
+                        <button class="delete-btn" onclick="deleteTask('${category}', '${task.id}')" title="削除">×</button>
                     </li>`;
             }).join('');
         }
@@ -1147,7 +1146,6 @@
             });
 
             // 2. テスト対象：2日後の復習通知
-            // テスト日から2日経った日 = 今日 => テスト日 = 今日 - 2日
             tasksData['test'].forEach(task => {
                 if (!task.date) return;
                 const tDate = new Date(task.date); tDate.setHours(0, 0, 0, 0);
@@ -1269,18 +1267,13 @@
                 document.getElementById(`${type}Goal`).addEventListener('input', (e) => { goalsData[type] = e.target.value; saveGoals(); });
             });
 
-            // モーダル外部クリック
             document.getElementById('linksModal').addEventListener('click', (e) => { if (e.target.id === 'linksModal') closeLinksModal(); });
             document.getElementById('timerModal').addEventListener('click', (e) => { if (e.target.id === 'timerModal') closeTimerModal(); });
-
-            // タイマー入力同期
             document.getElementById('timerMin').addEventListener('input', syncTimerFromInput);
             document.getElementById('timerSec').addEventListener('input', syncTimerFromInput);
 
             ['assignment', 'test', 'schedule', 'parttime'].forEach(renderTasks);
             updateCounts();
-
-            // 通知チェック
             checkNotifications();
         });
     </script>
